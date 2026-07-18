@@ -1,7 +1,41 @@
-#include "../include/main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-BankAccount *accounts = NULL;
-int accountCount = 0;
+#define MAX 100
+
+typedef struct
+{
+    int accNo;
+    char name[50];
+    char phone[15];
+    float balance;
+} Account;
+
+Account accounts[MAX];
+int count = 0;
+
+void createAccount();
+void displayAccounts();
+void searchAccount();
+void depositMoney();
+void withdrawMoney();
+void transferMoney();
+void updateAccount();
+void deleteAccount();
+void saveToFile();
+void loadFromFile();
+
+int findAccount(int accNo)
+{
+    int i;
+    for(i=0;i<count;i++)
+    {
+        if(accounts[i].accNo==accNo)
+            return i;
+    }
+    return -1;
+}
 
 int main()
 {
@@ -9,27 +43,29 @@ int main()
 
     loadFromFile();
 
-    do
+    while(1)
     {
-        printf("\n=================================\n");
-        printf("     BANK MANAGEMENT SYSTEM\n");
-        printf("=================================\n");
-        printf("1. Add Account\n");
+        printf("\n==============================\n");
+        printf(" BANK MANAGEMENT SYSTEM\n");
+        printf("==============================\n");
+        printf("1. Create Account\n");
         printf("2. Display Accounts\n");
         printf("3. Search Account\n");
         printf("4. Deposit Money\n");
         printf("5. Withdraw Money\n");
-        printf("6. Delete Account\n");
-        printf("7. Save Accounts\n");
-        printf("8. Exit\n");
-
-        printf("\nEnter your choice: ");
-        scanf("%d", &choice);
+        printf("6. Transfer Money\n");
+        printf("7. Update Account\n");
+        printf("8. Delete Account\n");
+        printf("9. Save Accounts\n");
+        printf("10. Load Accounts\n");
+        printf("11. Exit\n");
+        printf("Enter Choice : ");
+        scanf("%d",&choice);
 
         switch(choice)
         {
             case 1:
-                addAccount();
+                createAccount();
                 break;
 
             case 2:
@@ -41,77 +77,305 @@ int main()
                 break;
 
             case 4:
-                depositAmount();
+                depositMoney();
                 break;
 
             case 5:
-                withdrawAmount();
+                withdrawMoney();
                 break;
 
             case 6:
-                deleteAccount();
+                transferMoney();
                 break;
 
             case 7:
-                saveToFile();
-                printf("Accounts saved successfully.\n");
+                updateAccount();
                 break;
 
             case 8:
-                saveToFile();
-                freeMemory();
-                printf("Thank you for using Bank Management System.\n");
+                deleteAccount();
                 break;
 
-            default:
-                printf("Invalid Choice!\n");
-        }
+            case 9:
+                saveToFile();
+                break;
 
-    } while(choice != 8);
+            case 10:
+                loadFromFile();
+                break;
+
+            case 11:
+                saveToFile();
+                printf("\nThank You!\n");
+                exit(0);
+
+            default:
+                printf("\nInvalid Choice\n");
+        }
+    }
 
     return 0;
 }
-void addAccount()
+
+void createAccount()
 {
-    printf("\nFeature Coming Soon...\n");
+    printf("\nEnter Account Number : ");
+    scanf("%d",&accounts[count].accNo);
+
+    printf("Enter Name : ");
+    scanf(" %[^\n]",accounts[count].name);
+
+    printf("Enter Phone : ");
+    scanf("%s",accounts[count].phone);
+
+    printf("Enter Initial Balance : ");
+    scanf("%f",&accounts[count].balance);
+
+    count++;
+
+    printf("\nAccount Created Successfully!\n");
 }
 
 void displayAccounts()
 {
-    printf("\nFeature Coming Soon...\n");
+    int i;
+
+    if(count==0)
+    {
+        printf("\nNo Accounts Found.\n");
+        return;
+    }
+
+    printf("\n--------------- ACCOUNT LIST ---------------\n");
+
+    for(i=0;i<count;i++)
+    {
+        printf("\nAccount Number : %d",accounts[i].accNo);
+        printf("\nName           : %s",accounts[i].name);
+        printf("\nPhone          : %s",accounts[i].phone);
+        printf("\nBalance        : %.2f\n",accounts[i].balance);
+    }
 }
 
 void searchAccount()
 {
-    printf("\nFeature Coming Soon...\n");
+    int acc,index;
+
+    printf("Enter Account Number : ");
+    scanf("%d",&acc);
+
+    index=findAccount(acc);
+
+    if(index==-1)
+    {
+        printf("\nAccount Not Found.\n");
+        return;
+    }
+
+    printf("\nAccount Number : %d",accounts[index].accNo);
+    printf("\nName           : %s",accounts[index].name);
+    printf("\nPhone          : %s",accounts[index].phone);
+    printf("\nBalance        : %.2f\n",accounts[index].balance);
+}
+void depositMoney()
+{
+    int acc,index;
+    float amount;
+
+    printf("Enter Account Number : ");
+    scanf("%d",&acc);
+
+    index=findAccount(acc);
+
+    if(index==-1)
+    {
+        printf("\nAccount Not Found.\n");
+        return;
+    }
+
+    printf("Enter Deposit Amount : ");
+    scanf("%f",&amount);
+
+    if(amount<=0)
+    {
+        printf("Invalid Amount!\n");
+        return;
+    }
+
+    accounts[index].balance += amount;
+
+    printf("\nAmount Deposited Successfully!\n");
+    printf("Current Balance : %.2f\n",accounts[index].balance);
 }
 
-void depositAmount()
+void withdrawMoney()
 {
-    printf("\nFeature Coming Soon...\n");
+    int acc,index;
+    float amount;
+
+    printf("Enter Account Number : ");
+    scanf("%d",&acc);
+
+    index=findAccount(acc);
+
+    if(index==-1)
+    {
+        printf("\nAccount Not Found.\n");
+        return;
+    }
+
+    printf("Enter Withdrawal Amount : ");
+    scanf("%f",&amount);
+
+    if(amount<=0)
+    {
+        printf("Invalid Amount!\n");
+        return;
+    }
+
+    if(amount>accounts[index].balance)
+    {
+        printf("Insufficient Balance!\n");
+        return;
+    }
+
+    accounts[index].balance -= amount;
+
+    printf("\nWithdrawal Successful!\n");
+    printf("Current Balance : %.2f\n",accounts[index].balance);
 }
 
-void withdrawAmount()
+void transferMoney()
 {
-    printf("\nFeature Coming Soon...\n");
+    int from,to;
+    int i,j;
+    float amount;
+
+    printf("From Account Number : ");
+    scanf("%d",&from);
+
+    printf("To Account Number : ");
+    scanf("%d",&to);
+
+    i=findAccount(from);
+    j=findAccount(to);
+
+    if(i==-1 || j==-1)
+    {
+        printf("\nOne or Both Accounts Not Found.\n");
+        return;
+    }
+
+    printf("Enter Amount : ");
+    scanf("%f",&amount);
+
+    if(amount<=0)
+    {
+        printf("Invalid Amount!\n");
+        return;
+    }
+
+    if(amount>accounts[i].balance)
+    {
+        printf("Insufficient Balance!\n");
+        return;
+    }
+
+    accounts[i].balance-=amount;
+    accounts[j].balance+=amount;
+
+    printf("\nTransfer Successful!\n");
+}
+
+void updateAccount()
+{
+    int acc,index;
+
+    printf("Enter Account Number : ");
+    scanf("%d",&acc);
+
+    index=findAccount(acc);
+
+    if(index==-1)
+    {
+        printf("Account Not Found!\n");
+        return;
+    }
+
+    printf("Enter New Name : ");
+    scanf(" %[^\n]",accounts[index].name);
+
+    printf("Enter New Phone : ");
+    scanf("%s",accounts[index].phone);
+
+    printf("\nAccount Updated Successfully!\n");
 }
 
 void deleteAccount()
 {
-    printf("\nFeature Coming Soon...\n");
-}
+    int acc,index,i;
 
+    printf("Enter Account Number : ");
+    scanf("%d",&acc);
+
+    index=findAccount(acc);
+
+    if(index==-1)
+    {
+        printf("Account Not Found!\n");
+        return;
+    }
+
+    for(i=index;i<count-1;i++)
+    {
+        accounts[i]=accounts[i+1];
+    }
+
+    count--;
+
+    printf("\nAccount Deleted Successfully!\n");
+}
 void saveToFile()
 {
+    FILE *fp;
+    int i;
 
+    fp = fopen("accounts.dat","wb");
+
+    if(fp==NULL)
+    {
+        printf("Error Saving File!\n");
+        return;
+    }
+
+    fwrite(&count,sizeof(int),1,fp);
+
+    for(i=0;i<count;i++)
+    {
+        fwrite(&accounts[i],sizeof(Account),1,fp);
+    }
+
+    fclose(fp);
+
+    printf("\nAccounts Saved Successfully!\n");
 }
 
 void loadFromFile()
 {
+    FILE *fp;
+    int i;
 
-}
+    fp = fopen("accounts.dat","rb");
 
-void freeMemory()
-{
+    if(fp==NULL)
+        return;
 
+    fread(&count,sizeof(int),1,fp);
+
+    for(i=0;i<count;i++)
+    {
+        fread(&accounts[i],sizeof(Account),1,fp);
+    }
+
+    fclose(fp);
 }

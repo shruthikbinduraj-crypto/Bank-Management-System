@@ -1,28 +1,50 @@
-# Bank Management System
+# 🏦 Bank Management System
 
-A console-based Bank Management System developed in C using dynamic memory allocation and file handling.
+A console-based **Bank Management System** developed in **C** that simulates basic banking operations through a menu-driven interface. The application allows users to create and manage bank accounts, perform transactions, and store account information using file handling.
 
-## Features
+---
 
-- Add Account
-- Display Accounts
-- Search Account
+## ✨ Features
+
+- Create New Account
+- Display All Accounts
+- Search Account by Account Number
 - Deposit Money
 - Withdraw Money
+- Transfer Money Between Accounts
+- Update Account Details
 - Delete Account
-- Save Accounts to File
-- Load Accounts from File
+- Save Account Data to File
+- Load Account Data from File
+- Menu-Driven User Interface
 
-## Concepts Used
+---
 
+## 📚 Concepts Used
+
+- C Programming
 - Structures
-- Dynamic Memory Allocation
-- File Handling
-- Functions
 - Arrays
+- Functions
 - Pointers
+- File Handling
+- Loops
+- Conditional Statements
+- String Manipulation
 
-## Project Structure
+---
+
+## 💻 Technologies Used
+
+- C Programming Language
+- GCC Compiler
+- Visual Studio Code
+- Git
+- GitHub
+
+---
+
+## 📁 Project Structure
 
 ```
 Bank-Management-System
@@ -31,9 +53,9 @@ Bank-Management-System
 │   └── main.c
 │
 ├── include
-│   └── main.h
 │
 ├── data
+│   └── accounts.dat
 │
 ├── docs
 │
@@ -44,6 +66,73 @@ Bank-Management-System
 └── .gitignore
 ```
 
-## Author
+---
 
-Shruthik Binduraj
+## ⚙️ How to Compile
+
+```bash
+gcc src/main.c -o bank
+```
+
+---
+
+## ▶️ How to Run
+
+### Windows
+
+```bash
+bank.exe
+```
+
+### Linux/macOS
+
+```bash
+./bank
+```
+
+---
+
+## 💾 Data Storage
+
+Account information is stored in the following file:
+
+```
+data/accounts.dat
+```
+
+The application automatically saves account data before exiting and loads existing account data when it starts.
+
+---
+
+## 📸 Screenshots
+
+Add screenshots of the application inside the `screenshots` folder.
+
+Example:
+
+```
+screenshots/
+├── home.png
+├── create-account.png
+├── deposit.png
+└── display-accounts.png
+```
+
+---
+
+## 🚀 Future Enhancements
+
+- User Authentication
+- Password Protection
+- Transaction History
+- Interest Calculation
+- Loan Management
+- Account Statement Generation
+- Database Integration (MySQL)
+- Graphical User Interface (GUI)
+
+---
+
+## 👨‍💻 Author
+
+**Shruthik Binduraj**
